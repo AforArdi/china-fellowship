@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNESCO/China Great Wall Fellowship Guide 2026-2027</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Application Structure Plan:
+         1. Hero Section: Immediate context (What/When) with a countdown/deadline focus.
+         2. "Am I Eligible?" Wizard: Interactive form to filter users into the 4 categories (Gen Scholar, Senior Scholar, Master, PhD) based on age/degree.
+         3. Value Proposition: Chart.js visualization of the financial benefits (Stipend + Allowance).
+         4. Process Map: Step-by-step visual timeline from application to departure.
+         5. Document Checklist: Interactive toggle list for users to track requirements.
+         6. Language Requirements: Clear breakdown of English vs. Chinese path.
+         7. FAQ/Footer: Quick answers and links.
+         
+         Design Rationale:
+         - The report is heavy on administrative details (ages, document lists, distinct categories). 
+         - A "Wizard" approach simplifies the complex age/degree matrix.
+         - Visualizing the money makes the value tangible.
+         - A checklist transforms a boring list into an actionable tool.
+    -->
+
+    <!-- Chosen Palette: 
+         Primary: UNESCO Blue (#0077D4) - Trust, Official.
+         Secondary: China Red (#DE2910) - Used sparingly for deadlines/alerts.
+         Background: Warm Neutral/White (#F9FAFB) - Clean, readable.
+         Text: Slate 800 (#1E293B) - High contrast.
+    -->
+
+    <style>
+        body { font-family: 'Noto Sans', sans-serif; }
+        
+        /* Custom Chart Container Class as per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Checkbox custom style */
+        .custom-checkbox:checked + div {
+            text-decoration: line-through;
+            color: #9CA3AF;
+        }
+
+        /* Smooth scroll behavior */
+        html { scroll-behavior: smooth; }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-3">
+                        <div class="h-8 w-8 bg-[#0077D4] rounded-sm flex items-center justify-center text-white font-bold text-xl">U</div>
+                        <span class="font-bold text-lg tracking-tight text-slate-900">Great Wall Fellowship</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#overview" class="text-slate-600 hover:text-[#0077D4] px-3 py-2 rounded-md text-sm font-medium transition-colors">Overview</a>
+                    <a href="#eligibility" class="text-slate-600 hover:text-[#0077D4] px-3 py-2 rounded-md text-sm font-medium transition-colors">Eligibility Checker</a>
+                    <a href="#benefits" class="text-slate-600 hover:text-[#0077D4] px-3 py-2 rounded-md text-sm font-medium transition-colors">Benefits</a>
+                    <a href="#process" class="text-slate-600 hover:text-[#0077D4] px-3 py-2 rounded-md text-sm font-medium transition-colors">How to Apply</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="overview" class="bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:flex lg:items-center lg:justify-between">
+            <div class="max-w-xl">
+                <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-4">
+                    2026-2027 Cycle Open
+                </div>
+                <h1 class="text-4xl font-extrabold text-slate-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+                    UNESCO / China <br>
+                    <span class="text-[#0077D4]">Great Wall Fellowship</span>
+                </h1>
+                <p class="mt-5 text-xl text-slate-500">
+                    A fully funded opportunity for 75 scholars from 135 developing countries to pursue advanced studies and research in China.
+                </p>
+                
+                <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div class="bg-red-50 border-l-4 border-[#DE2910] p-4 rounded-r-md">
+                        <div class="flex">
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700 font-bold">
+                                    Urgent Deadline: Jan 23, 2026
+                                </p>
+                                <p class="text-xs text-red-600 mt-1">
+                                    Submission to National Commissions
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 border-l-4 border-[#0077D4] p-4 rounded-r-md">
+                        <div class="flex">
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700 font-bold">
+                                    Agency Number: 00001
+                                </p>
+                                <p class="text-xs text-blue-600 mt-1">
+                                    Select "Type A" Application
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-10 lg:mt-0 lg:ml-10 bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm max-w-md w-full">
+                <h3 class="text-lg font-bold text-slate-800 mb-4">Quick Program Facts</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-5 w-5 text-green-500">✓</span>
+                        <span class="ml-3 text-sm text-slate-600"><strong>Full Tuition Waiver</strong> at Chinese Universities</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-5 w-5 text-green-500">✓</span>
+                        <span class="ml-3 text-sm text-slate-600"><strong>Accommodation & Stipend</strong> included</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-5 w-5 text-green-500">✓</span>
+                        <span class="ml-3 text-sm text-slate-600"><strong>International Airfare</strong> covered by UNESCO</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-5 w-5 text-green-500">✓</span>
+                        <span class="ml-3 text-sm text-slate-600">Open to <strong>Undergrad*, Masters, PhD & Scholars</strong></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Eligibility Checker Section -->
+    <section id="eligibility" class="py-16 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-slate-900">Eligibility Checker</h2>
+                <p class="mt-4 text-lg text-slate-600">
+                    The program has strict age and degree requirements. Select your profile below to see if you qualify and which track is right for you.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                <div class="p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <label for="userAge" class="block text-sm font-medium text-slate-700 mb-2">Your Age (as of application)</label>
+                            <input type="number" id="userAge" placeholder="e.g., 28" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                        </div>
+                        <div>
+                            <label for="userDegree" class="block text-sm font-medium text-slate-700 mb-2">Highest Degree Held</label>
+                            <select id="userDegree" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                <option value="">Select your degree...</option>
+                                <option value="highschool">High School Diploma</option>
+                                <option value="bachelor">Bachelor's Degree</option>
+                                <option value="master">Master's Degree</option>
+                                <option value="phd">PhD / Associate Professor</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button onclick="checkEligibility()" class="w-full bg-[#0077D4] hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-sm">
+                        Check My Eligibility
+                    </button>
+                </div>
+
+                <!-- Result Container -->
+                <div id="eligibilityResult" class="hidden bg-slate-100 p-8 border-t border-slate-200 transition-all duration-300">
+                    <!-- Dynamic Content Injected Here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Benefits Visualization -->
+    <section id="benefits" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-6">Financial Coverage</h2>
+                    <p class="text-lg text-slate-600 mb-6">
+                        The fellowship is comprehensive, covering both academic costs and living expenses. It combines support from the Chinese Government (Tuition, Accommodation, Stipend) and UNESCO (International Travel, Pocket Allowance).
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <span class="font-medium text-slate-700">General/Master's Stipend</span>
+                            <span class="font-bold text-[#0077D4]">CNY 3,000 / mo</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <span class="font-medium text-slate-700">Senior/PhD Stipend</span>
+                            <span class="font-bold text-[#0077D4]">CNY 3,500 / mo</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-100">
+                            <span class="font-medium text-blue-900">UNESCO Pocket Allowance</span>
+                            <span class="font-bold text-blue-700">$80 USD / mo</span>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg border border-green-100">
+                            <p class="text-sm text-green-800">
+                                <strong>Plus:</strong> Comprehensive Medical Insurance & Termination Allowance (up to $200 for excess luggage).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Monthly Value Estimator (CNY)</h3>
+                    <!-- Chart Container as specified in requirements -->
+                    <div class="chart-container">
+                        <canvas id="benefitsChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-2 text-center">*Accommodation value estimated at market rate for illustration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Process & Timeline -->
+    <section id="process" class="py-16 bg-slate-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-slate-900">How to Apply</h2>
+                <p class="mt-4 text-lg text-slate-600">Follow these critical steps strictly. Direct applications to UNESCO without National Commission endorsement are rejected.</p>
+            </div>
+
+            <div class="relative">
+                <!-- Vertical Line -->
+                <div class="absolute left-8 top-0 h-full w-0.5 bg-slate-200 hidden md:block"></div>
+
+                <div class="space-y-12">
+                    <!-- Step 1 -->
+                    <div class="relative flex flex-col md:flex-row gap-8">
+                        <div class="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-[#0077D4] font-bold text-2xl border-4 border-white shadow-sm z-10">1</div>
+                        <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Prepare Documents</h3>
+                            <p class="text-slate-600 mb-4">Gather all required documents. Use the checklist below to ensure you don't miss anything.</p>
+                            
+                            <!-- Interactive Checklist -->
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-semibold text-sm text-slate-700 mb-3 uppercase tracking-wide">Required Documents Checklist</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="docChecklist">
+                                    <!-- JS will populate -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative flex flex-col md:flex-row gap-8">
+                        <div class="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-[#0077D4] font-bold text-2xl border-4 border-white shadow-sm z-10">2</div>
+                        <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Apply Online (CSC System)</h3>
+                            <p class="text-slate-600 mb-4">
+                                Visit <a href="http://www.campuschina.org" target="_blank" class="text-blue-600 underline">CampusChina.org</a>.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                                <div class="bg-slate-100 p-3 rounded">
+                                    <div class="text-xs text-slate-500 uppercase">Program Category</div>
+                                    <div class="font-bold text-slate-800">Type A</div>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded">
+                                    <div class="text-xs text-slate-500 uppercase">Agency Number</div>
+                                    <div class="font-bold text-slate-800">00001</div>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded">
+                                    <div class="text-xs text-slate-500 uppercase">Language</div>
+                                    <div class="font-bold text-slate-800">English/Chinese</div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-3 italic">Note: Print the completed application form.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative flex flex-col md:flex-row gap-8">
+                        <div class="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600 font-bold text-2xl border-4 border-white shadow-sm z-10">3</div>
+                        <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-red-200 ring-1 ring-red-100">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Submit to National Commission</h3>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">DEADLINE: JAN 23, 2026</span>
+                            </div>
+                            <p class="text-slate-600">
+                                Submit your hard copy application and supporting documents to the <strong>National Commission for UNESCO</strong> in your home country. They will pre-select candidates.
+                            </p>
+                            <div class="mt-4 p-3 bg-yellow-50 text-yellow-800 text-sm rounded border border-yellow-100">
+                                <strong>Important:</strong> Do NOT send applications directly to UNESCO Paris. Only nominations from the National Commission are accepted.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Language Requirement Detail -->
+    <section class="py-16 bg-white border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold text-slate-900 mb-8">Language Requirements Explained</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-6 bg-slate-50 rounded-xl border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-800 mb-3">English Taught Programs</h3>
+                    <p class="text-slate-600 mb-4 text-sm">Ideally, provide IELTS or TOEFL scores.</p>
+                    <div class="bg-blue-100 text-blue-800 p-3 rounded-lg text-sm font-medium">
+                        Alternative: "UNESCO Certificate of Language Knowledge"
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Can be signed by a certified language institute or tutor if standard tests are unavailable.</p>
+                </div>
+                <div class="p-6 bg-slate-50 rounded-xl border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-800 mb-3">Chinese Taught Programs</h3>
+                    <ul class="text-left space-y-2 text-sm text-slate-600">
+                        <li class="flex justify-between">
+                            <span>General/Senior Scholars:</span>
+                            <span class="font-bold">HSK Level 3</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Master's/PhD:</span>
+                            <span class="font-bold">HSK Level 4</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-8">
+            <div>
+                <h4 class="text-white font-bold text-lg mb-4">UNESCO / Great Wall</h4>
+                <p class="text-sm">Co-sponsored Fellowships Programme 2026-2027. Empowering education and research in developing countries.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-lg mb-4">Useful Links</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="http://www.campuschina.org" class="hover:text-white transition-colors">Campus China (Application)</a></li>
+                    <li><a href="https://www.unesco.org/en/fellowships/greatwall" class="hover:text-white transition-colors">Official UNESCO Page</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-lg mb-4">Contact</h4>
+                <p class="text-sm mb-2">Detailed inquiries should be directed to your local National Commission.</p>
+                <p class="text-sm">Email for nominated candidates: <br><span class="text-white">thegreatwall@unesco.org</span></p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 text-center text-xs">
+            <p>Generated for informational purposes based on the 2026-2027 Application Guidelines.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- State Management ---
+        const checklistItems = [
+            "Application Form (Type A, Agency 00001)",
+            "Passport Copy (valid beyond March 1, 2027)",
+            "Notarized Highest Diploma",
+            "Academic Transcripts",
+            "Language Certificate (IELTS/TOEFL/UNESCO Cert)",
+            "Study Plan / Research Proposal (500-800 words)",
+            "Recommendation Letters (x2) (Senior/Postgrad only)",
+            "Foreign Physical Examination Form",
+            "Non-Criminal Record Report",
+            "Pre-admission Letter (Optional but Recommended)"
+        ];
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChecklist();
+            initChart();
+        });
+
+        // --- Checklist Logic ---
+        function renderChecklist() {
+            const container = document.getElementById('docChecklist');
+            container.innerHTML = checklistItems.map((item, index) => `
+                <label class="flex items-start space-x-3 cursor-pointer p-2 hover:bg-slate-100 rounded transition-colors">
+                    <input type="checkbox" class="custom-checkbox mt-1 h-4 w-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                    <div class="text-sm text-slate-700 select-none">${item}</div>
+                </label>
+            `).join('');
+        }
+
+        // --- Eligibility Logic ---
+        function checkEligibility() {
+            const age = parseInt(document.getElementById('userAge').value);
+            const degree = document.getElementById('userDegree').value;
+            const resultDiv = document.getElementById('eligibilityResult');
+            
+            let message = "";
+            let status = "fail"; // neutral, success, fail
+
+            if (!age || !degree) {
+                alert("Please enter both your age and highest degree.");
+                return;
+            }
+
+            // Logic Tree based on source report
+            if (degree === 'phd' || degree === 'master') {
+                if (age < 40) {
+                    status = "success";
+                    message = `<strong>Excellent!</strong> You are eligible for the <strong>Doctoral Programme</strong> (Age < 40) or <strong>Master's Programme</strong> (Age < 35). <br>You may also apply as a Senior Scholar (Age < 50).`;
+                } else if (age < 50) {
+                    status = "success";
+                    message = `<strong>Great!</strong> You are eligible for the <strong>Senior Scholar Programme</strong> (Age < 50).`;
+                } else {
+                    message = "You exceed the age limit for Senior Scholars (50 years).";
+                }
+            } else if (degree === 'bachelor') {
+                if (age < 35) {
+                    status = "success";
+                    message = `<strong>Excellent!</strong> You are eligible for the <strong>Master's Programme</strong> (Age < 35).`;
+                } else if (age < 45) {
+                    status = "success";
+                    message = `<strong>Good news.</strong> You are eligible for the <strong>General Scholar Programme</strong> (Age < 45).`;
+                } else {
+                    message = "You exceed the age limit for General Scholars (45 years).";
+                }
+            } else if (degree === 'highschool') {
+                if (age < 45) {
+                    status = "success";
+                    message = `<strong>Eligible.</strong> You qualify for the <strong>General Scholar Programme</strong> (Age < 45). This is typically for undergraduate level visiting studies.`;
+                } else {
+                    message = "You exceed the age limit for General Scholars (45 years).";
+                }
+            }
+
+            // Render Result
+            resultDiv.classList.remove('hidden', 'bg-green-50', 'bg-red-50', 'border-green-200', 'border-red-200');
+            resultDiv.classList.add('fade-in');
+            
+            if (status === 'success') {
+                resultDiv.classList.add('bg-green-50', 'border-green-200');
+                resultDiv.innerHTML = `
+                    <div class="flex items-center text-green-800">
+                        <span class="text-2xl mr-3">🎉</span>
+                        <div class="text-lg">${message}</div>
+                    </div>
+                    <div class="mt-4 text-sm text-green-700">Next Step: Review the checklist below and contact your National Commission.</div>
+                `;
+            } else {
+                resultDiv.classList.add('bg-red-50', 'border-red-200');
+                resultDiv.innerHTML = `
+                    <div class="flex items-center text-red-800">
+                        <span class="text-2xl mr-3">⚠️</span>
+                        <div class="text-lg">${message}</div>
+                    </div>
+                    <div class="mt-2 text-sm text-red-700">Please verify the specific age requirements for the current cycle in the official guidelines.</div>
+                `;
+            }
+        }
+
+        // --- Chart.js Visualization ---
+        function initChart() {
+            const ctx = document.getElementById('benefitsChart').getContext('2d');
+            
+            // Data estimation for visualization
+            // Stipend: 3000 (Gen) / 3500 (Senior)
+            // Pocket: $80 USD ~= 570 CNY
+            // Accommodation: Est. 2500 CNY (market value subsidy)
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['General/Master\'s', 'Senior/PhD'],
+                    datasets: [
+                        {
+                            label: 'Monthly Stipend (CNY)',
+                            data: [3000, 3500],
+                            backgroundColor: '#0077D4',
+                            stack: 'Stack 0',
+                        },
+                        {
+                            label: 'UNESCO Pocket Money (CNY Equiv)',
+                            data: [570, 570], // Approx $80
+                            backgroundColor: '#60A5FA',
+                            stack: 'Stack 0',
+                        },
+                        {
+                            label: 'Accommodation Value (Est. CNY)',
+                            data: [2500, 2500], // Estimated value of free dorm
+                            backgroundColor: '#CBD5E1',
+                            stack: 'Stack 0',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                footer: (items) => {
+                                    const total = items.reduce((a, b) => a + b.raw, 0);
+                                    return 'Total Monthly Value: ~' + total + ' CNY';
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Estimated Monthly Value Breakdown (CNY)'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Value (CNY)' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

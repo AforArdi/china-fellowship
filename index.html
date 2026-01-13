@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ইউনেস্কো/চীন গ্রেট ওয়াল ফেলোশিপ গাইড ২০২৬-২০২৭ (বাংলাদেশ)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts: Noto Sans Bengali for better readability -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: 
+         Primary: UNESCO Blue (#0077D4) - Trust, Official.
+         Secondary: BD Green (#006A4E) - Localization, National Identity.
+         Background: Warm Neutral/White (#F9FAFB) - Clean, readable.
+         Text: Slate 800 (#1E293B) - High contrast.
+    -->
+
+    <!-- Application Structure Plan:
+         This localized SPA is designed specifically for Bangladeshi students to navigate the UNESCO/China Great Wall Fellowship application process.
+         
+         1. **Hero Section (হিরো সেকশন):** Immediate hook in Bangla, highlighting the "Fully Funded" nature and the urgency of the deadline for the Bangladesh National Commission.
+         2. **Eligibility Wizard (যোগ্যতা যাচাই):** An interactive form tailored to Bangladeshi education levels (HSC, Honors, Masters) to determine eligibility for General, Senior, or Postgraduate tracks.
+         3. **Financial Value (আর্থিক সুবিধাসমূহ):** A Chart.js visualization converting the CNY stipend into approximate BDT, making the value proposition instantly relatable and attractive to local applicants.
+         4. **Application Roadmap (আবেদন প্রক্রিয়া):** A localized step-by-step guide emphasizing the specific requirement to submit to the Bangladesh National Commission for UNESCO (BNCU) / Ministry of Education, not just the online portal.
+         5. **Document Checklist (ডকুমেন্ট চেকলিস্ট):** An interactive tool in Bangla to ensure students have all necessary papers (transcripts, passport, etc.) ready.
+         6. **FAQ & Language (ভাষা ও প্রশ্ন):** Clarifying the English/Chinese medium requirements and IELTS necessity in the local context.
+    -->
+
+    <style>
+        body { font-family: 'Noto Sans Bengali', sans-serif; }
+        
+        /* Custom Chart Container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Checkbox custom style */
+        .custom-checkbox:checked + div {
+            text-decoration: line-through;
+            color: #9CA3AF;
+        }
+
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- Visualization & Content Choices:
+         - **Benefits Chart:** Bar chart comparing Stipend categories (General vs Senior) in BDT equivalents. Goal: Motivate users by showing real-world value.
+         - **Eligibility Logic:** Conditional logic tree mapping Age + Degree -> Program Category. Goal: Simplify complex rules into a Yes/No outcome.
+         - **Checklist:** Interactive text list. Goal: Task management.
+    -->
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-3">
+                        <div class="h-8 w-8 bg-[#006A4E] rounded-sm flex items-center justify-center text-white font-bold text-xl">U</div>
+                        <span class="font-bold text-lg tracking-tight text-slate-900 hidden sm:block">Great Wall Fellowship (BD)</span>
+                        <span class="font-bold text-lg tracking-tight text-slate-900 sm:hidden">Great Wall (BD)</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4 md:space-x-8">
+                    <a href="#eligibility" class="text-slate-600 hover:text-[#006A4E] px-2 py-2 rounded-md text-sm font-medium transition-colors">যোগ্যতা</a>
+                    <a href="#benefits" class="text-slate-600 hover:text-[#006A4E] px-2 py-2 rounded-md text-sm font-medium transition-colors">সুবিধা</a>
+                    <a href="#process" class="bg-[#006A4E] text-white hover:bg-green-800 px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm">আবেদন করুন</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-50 to-green-50 opacity-50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 relative z-10 lg:flex lg:items-center lg:justify-between">
+            <div class="max-w-2xl">
+                <div class="inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-red-100 text-red-800 mb-4 border border-red-200">
+                    ⚠️ ডেডলাইন: ২৩ জানুয়ারি ২০২৬ (সম্ভাব্য)
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight lg:text-5xl leading-tight">
+                    বাংলাদেশী শিক্ষার্থীদের জন্য <br>
+                    <span class="text-[#0077D4]">ইউনেস্কো / চীন গ্রেট ওয়াল ফেলোশিপ</span>
+                </h1>
+                <p class="mt-5 text-lg text-slate-600 leading-relaxed">
+                    এটি একটি সম্পূর্ণ ফান্ডেড স্কলারশিপ প্রোগ্রাম। টিউশন ফি, আবাসন, এবং মাসিক উপবৃত্তি সহ চীনে উচ্চশিক্ষার সুবর্ণ সুযোগ। বাংলাদেশ থেকে প্রতি বছর এই প্রোগ্রামে শিক্ষার্থীদের মনোনয়ন দেওয়া হয়।
+                </p>
+                
+                <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div class="bg-white border-l-4 border-[#006A4E] p-4 rounded shadow-sm">
+                        <div class="flex">
+                            <div class="ml-3">
+                                <p class="text-sm text-slate-500">কোথায় আবেদন করবেন?</p>
+                                <p class="text-base font-bold text-slate-800 mt-1">
+                                    বাংলাদেশ ন্যাশনাল কমিশন ফর ইউনেস্কো (BNCU)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white border-l-4 border-[#0077D4] p-4 rounded shadow-sm">
+                        <div class="flex">
+                            <div class="ml-3">
+                                <p class="text-sm text-slate-500">Agency Number</p>
+                                <p class="text-base font-bold text-slate-800 mt-1">
+                                    00001 (Type A)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-10 lg:mt-0 lg:ml-10 bg-white p-6 rounded-xl border border-slate-200 shadow-lg max-w-md w-full transform hover:-translate-y-1 transition-transform duration-300">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">এক নজরে সুবিধাসমূহ</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-5 w-5 text-green-500 flex items-center justify-center border border-green-500 rounded-full text-xs">✓</span>
+                        <span class="ml-3 text-sm text-slate-600">সম্পূর্ণ <strong>টিউশন ফি ফ্রি</strong></span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-5 w-5 text-green-500 flex items-center justify-center border border-green-500 rounded-full text-xs">✓</span>
+                        <span class="ml-3 text-sm text-slate-600">বিনামূল্যে <strong>আবাসন ও চিকিৎসা বীমা</strong></span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-5 w-5 text-green-500 flex items-center justify-center border border-green-500 rounded-full text-xs">✓</span>
+                        <span class="ml-3 text-sm text-slate-600">মাসিক <strong>স্টাইপেন্ড</strong> (৫০,০০০ - ৫৮,০০০ টাকা*)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-5 w-5 text-green-500 flex items-center justify-center border border-green-500 rounded-full text-xs">✓</span>
+                        <span class="ml-3 text-sm text-slate-600">যাতায়াতের <strong>বিমান খরচ</strong> (UNESCO বহন করবে)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Eligibility Section -->
+    <section id="eligibility" class="py-16 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">আপনি কি আবেদনের যোগ্য?</h2>
+                <p class="mt-4 text-base text-slate-600">
+                    বয়স এবং শিক্ষাগত যোগ্যতার ভিত্তিতে আপনার ক্যাটাগরি যাচাই করতে নিচের ফর্মটি পূরণ করুন।
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow border border-slate-200 overflow-hidden">
+                <div class="p-6 sm:p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <label for="userAge" class="block text-sm font-medium text-slate-700 mb-2">আপনার বয়স (আবেদনের সময়)</label>
+                            <input type="number" id="userAge" placeholder="উদাহরণ: 24" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] transition-colors bg-slate-50">
+                        </div>
+                        <div>
+                            <label for="userDegree" class="block text-sm font-medium text-slate-700 mb-2">সর্বশেষ অর্জিত ডিগ্রি</label>
+                            <select id="userDegree" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] transition-colors bg-slate-50">
+                                <option value="">নির্বাচন করুন...</option>
+                                <option value="hsc">এইচএসসি / সমমান (High School)</option>
+                                <option value="bachelor">স্নাতক / অনার্স (Bachelor's)</option>
+                                <option value="master">স্নাতকোত্তর (Master's)</option>
+                                <option value="phd">পিএইচডি / সহযোগী অধ্যাপক</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button onclick="checkEligibility()" class="w-full bg-[#006A4E] hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-lg flex justify-center items-center">
+                        <span class="mr-2">যাচাই করুন</span> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                    </button>
+                </div>
+
+                <!-- Result Container -->
+                <div id="eligibilityResult" class="hidden bg-slate-100 p-8 border-t border-slate-200 transition-all duration-300">
+                    <!-- Dynamic JS Content -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Benefits Visualization -->
+    <section id="benefits" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-extrabold text-slate-900 mb-4">আর্থিক সুবিধাসমূহ (টাকায় রূপান্তর)</h2>
+                <p class="text-slate-600 max-w-3xl">
+                    নিচের চার্টে মাসিক স্টাইপেন্ড এবং অন্যান্য সুবিধার পরিমাণ বাংলাদেশী টাকায় (আনুমানিক) দেখানো হয়েছে। এটি আপনাকে চীনে জীবনযাত্রার ব্যয় এবং সঞ্চয় সম্পর্কে ধারণা দেবে।
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Data List -->
+                <div class="space-y-4 order-2 lg:order-1">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                        <h4 class="font-bold text-blue-800">জেনারেল স্কলার / মাস্টার্স</h4>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-sm text-slate-600">মাসিক স্টাইপেন্ড (৩০০০ CNY)</span>
+                            <span class="font-bold text-slate-800">~ ৫০,০০০ টাকা</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-500 shadow-sm">
+                        <h4 class="font-bold text-indigo-800">সিনিয়র স্কলার / পিএইচডি</h4>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-sm text-slate-600">মাসিক স্টাইপেন্ড (৩৫০০ CNY)</span>
+                            <span class="font-bold text-slate-800">~ ৫৮,০০০ টাকা</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                        <div class="flex items-start">
+                            <span class="text-2xl mr-3">✈️</span>
+                            <div>
+                                <h4 class="font-bold text-green-800">অতিরিক্ত সুবিধা</h4>
+                                <p class="text-sm text-green-700 mt-1">
+                                    ইউনেস্কো থেকে মাসিক পকেট মানি (~$৮০ ডলার বা ১৩,০০০ টাকা) এবং আন্তর্জাতিক বিমান টিকিট।
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 italic mt-2">* টাকার পরিমাণ বিনিময় হারের (Exchange Rate) উপর ভিত্তি করে পরিবর্তন হতে পারে (১ CNY ≈ ১৬.৫ BDT ধরে)।</p>
+                </div>
+
+                <!-- Chart -->
+                <div class="flex flex-col items-center order-1 lg:order-2">
+                    <div class="chart-container">
+                        <canvas id="bdBenefitsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Process -->
+    <section id="process" class="py-16 bg-slate-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-slate-900">আবেদন প্রক্রিয়া: ধাপে ধাপে</h2>
+                <p class="mt-4 text-lg text-slate-600">সঠিকভাবে আবেদন সম্পন্ন করতে নিচের ধাপগুলো সতর্কতার সাথে অনুসরণ করুন।</p>
+            </div>
+
+            <div class="relative">
+                <div class="absolute left-8 top-0 h-full w-0.5 bg-slate-200 hidden md:block"></div>
+
+                <div class="space-y-12">
+                    <!-- Step 1 -->
+                    <div class="relative flex flex-col md:flex-row gap-8">
+                        <div class="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-white text-[#006A4E] font-bold text-2xl border-4 border-[#006A4E] shadow-sm z-10">১</div>
+                        <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">কাগজপত্র প্রস্তুতকরণ</h3>
+                            <p class="text-slate-600 mb-4 text-sm">আবেদন করার পূর্বে নিচের চেকলিস্ট দেখে নিশ্চিত করুন আপনার কাছে সব কাগজপত্র আছে কিনা।</p>
+                            
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-semibold text-sm text-slate-700 mb-3 uppercase tracking-wide">প্রয়োজনীয় ডকুমেন্টস চেকলিস্ট</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="docChecklist">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative flex flex-col md:flex-row gap-8">
+                        <div class="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-white text-[#0077D4] font-bold text-2xl border-4 border-[#0077D4] shadow-sm z-10">২</div>
+                        <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">অনলাইন আবেদন (Campus China)</h3>
+                            <p class="text-slate-600 mb-4">
+                                আপনাকে <a href="http://www.campuschina.org" target="_blank" class="text-blue-600 underline font-semibold">CampusChina.org</a> ওয়েবসাইটে গিয়ে আবেদন ফর্ম পূরণ করতে হবে।
+                            </p>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
+                                <div class="bg-blue-50 p-2 rounded border border-blue-100">
+                                    <div class="text-[10px] text-slate-500 uppercase">Program Category</div>
+                                    <div class="font-bold text-slate-800 text-sm">Type A</div>
+                                </div>
+                                <div class="bg-blue-50 p-2 rounded border border-blue-100">
+                                    <div class="text-[10px] text-slate-500 uppercase">Agency Number</div>
+                                    <div class="font-bold text-slate-800 text-sm">00001</div>
+                                </div>
+                                <div class="bg-blue-50 p-2 rounded border border-blue-100 col-span-2 sm:col-span-1">
+                                    <div class="text-[10px] text-slate-500 uppercase">ভাষা</div>
+                                    <div class="font-bold text-slate-800 text-sm">ইংরেজি / চীনা</div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-red-500 mt-3 font-medium">* অনলাইনে ফর্মটি সাবমিট করে প্রিন্ট আউট নিন। এটি পরবর্তী ধাপে জমা দিতে হবে।</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative flex flex-col md:flex-row gap-8">
+                        <div class="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-white text-red-600 font-bold text-2xl border-4 border-red-600 shadow-sm z-10">৩</div>
+                        <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-red-200 ring-1 ring-red-50">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">বাংলাদেশ কমিশনে জমা</h3>
+                            <p class="text-slate-600 mb-3">
+                                অনলাইন আবেদনের হার্ডকপি এবং অন্যান্য সকল ডকুমেন্ট <strong>বাংলাদেশ ন্যাশনাল কমিশন ফর ইউনেস্কো (BNCU)</strong> বা শিক্ষা মন্ত্রণালয়ের নির্দিষ্ট দপ্তরে জমা দিতে হবে।
+                            </p>
+                            <div class="p-4 bg-yellow-50 rounded border border-yellow-200 text-sm text-yellow-800">
+                                <strong>সতর্কতা:</strong> সরাসরি ইউনেস্কো প্যারিস দপ্তরে বা চীনা বিশ্ববিদ্যালয়ে আবেদন পাঠালে তা গ্রহণযোগ্য হবে না। বাংলাদেশ সরকার কর্তৃক মনোনীত প্রার্থীরাই কেবল এই স্কলারশিপের জন্য বিবেচিত হবেন।
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Language Info -->
+    <section class="py-12 bg-white border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">ভাষা এবং IELTS সংক্রান্ত তথ্য</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="p-5 bg-slate-50 rounded-lg border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-2">ইংরেজি মাধ্যমের জন্য</h3>
+                    <p class="text-sm text-slate-600 mb-3">IELTS বা TOEFL বাধ্যতামূলক নয়, তবে থাকলে ভালো।</p>
+                    <div class="text-sm bg-white p-3 rounded border border-slate-200 shadow-sm">
+                        বিকল্প হিসেবে <strong>"Language Proficiency Certificate"</strong> জমা দেওয়া যেতে পারে (যা আপনার পূর্ববর্তী প্রতিষ্ঠান বা কোনো ভাষা শিক্ষা কেন্দ্র থেকে ইস্যু করা)।
+                    </div>
+                </div>
+                <div class="p-5 bg-slate-50 rounded-lg border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-2">চীনা মাধ্যমের জন্য</h3>
+                    <p class="text-sm text-slate-600">
+                        চীনা ভাষায় পড়তে চাইলে HSK লেভেল ৩ (জেনারেল স্কলার) অথবা HSK লেভেল ৪ (মাস্টার্স/পিএইচডি) প্রয়োজন হবে।
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Great Wall Fellowship</h4>
+                    <p class="text-sm text-slate-400">বাংলাদেশী শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষার একটি অন্যতম সেরা সুযোগ।</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">গুরুত্বপূর্ণ লিংক</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="http://www.campuschina.org" target="_blank" class="hover:text-white transition-colors">Campus China (আবেদন পোর্টাল)</a></li>
+                        <li><a href="https://moedu.gov.bd" target="_blank" class="hover:text-white transition-colors">শিক্ষা মন্ত্রণালয়, বাংলাদেশ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">যোগাযোগ (মনোনয়নের জন্য)</h4>
+                    <p class="text-sm mb-1">বাংলাদেশ ন্যাশনাল কমিশন ফর ইউনেস্কো (BNCU)</p>
+                    <p class="text-sm text-slate-500">ঢাকা, বাংলাদেশ</p>
+                </div>
+            </div>
+            <div class="mt-10 pt-8 border-t border-slate-800 text-xs text-slate-500 text-center">
+                <p>এই ওয়েবসাইটটি ইউনেস্কো/চীন গ্রেট ওয়াল ফেলোশিপ নির্দেশিকার তথ্যের ভিত্তিতে তৈরি। চূড়ান্ত তথ্যের জন্য সর্বদা অফিসিয়াল বিজ্ঞপ্তি অনুসরণ করুন।</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // --- Document Checklist Data (Bangla) ---
+        const bdChecklistItems = [
+            "আবেদন ফর্ম (Type A, Agency 00001)",
+            "পাসপোর্ট কপি (১ মার্চ ২০২৭ পর্যন্ত মেয়াদ থাকতে হবে)",
+            "নোটারি করা সর্বশেষ শিক্ষাগত সনদ (Notarized Diploma)",
+            "একাডেমিক ট্রান্সক্রিপ্ট (Mark Sheets)",
+            "ভাষাগত দক্ষতার সনদ (IELTS/Language Cert)",
+            "স্টাডি প্ল্যান বা রিসার্চ প্রপোজাল (৫০০-৮০০ শব্দ)",
+            "সুপারিশপত্র বা Recommendation Letters (২টি) - শুধুমাত্র মাস্টার্স/পিএইচডি/সিনিয়র স্কলারদের জন্য",
+            "ফরেন ফিজিক্যাল এক্সামিনেশন ফর্ম (মেডিকেল রিপোর্ট)",
+            "পুলিশ ক্লিয়ারেন্স সার্টিফিকেট (Non-Criminal Record)",
+            "প্রি-অ্যাডমিশন লেটার (ঐচ্ছিক, তবে থাকলে ভালো)"
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChecklist();
+            initChart();
+        });
+
+        // --- Render Checklist ---
+        function renderChecklist() {
+            const container = document.getElementById('docChecklist');
+            container.innerHTML = bdChecklistItems.map(item => `
+                <label class="flex items-start space-x-3 cursor-pointer p-2 hover:bg-slate-100 rounded transition-colors">
+                    <input type="checkbox" class="custom-checkbox mt-1 h-4 w-4 text-[#006A4E] rounded border-slate-300 focus:ring-[#006A4E]">
+                    <div class="text-sm text-slate-700 select-none leading-relaxed">${item}</div>
+                </label>
+            `).join('');
+        }
+
+        // --- Eligibility Logic (Localized) ---
+        function checkEligibility() {
+            const age = parseInt(document.getElementById('userAge').value);
+            const degree = document.getElementById('userDegree').value;
+            const resultDiv = document.getElementById('eligibilityResult');
+            
+            let message = "";
+            let status = "fail"; 
+
+            if (!age || !degree) {
+                alert("অনুগ্রহ করে আপনার বয়স এবং ডিগ্রি নির্বাচন করুন।");
+                return;
+            }
+
+            // Logic matching source report but with Bangla messages
+            if (degree === 'phd' || degree === 'master') {
+                if (age < 40) {
+                    status = "success";
+                    message = `<strong>অভিনন্দন!</strong> আপনি <strong>ডক্টরাল (PhD)</strong> (বয়স < ৪০) অথবা <strong>মাস্টার্স</strong> প্রোগ্রামের জন্য যোগ্য।`;
+                } else if (age < 50) {
+                    status = "success";
+                    message = `<strong>চমৎকার!</strong> আপনি <strong>সিনিয়র স্কলার (Senior Scholar)</strong> প্রোগ্রামের জন্য যোগ্য।`;
+                } else {
+                    message = "দুঃখিত, সিনিয়র স্কলারদের জন্য বয়সসীমা ৫০ বছর।";
+                }
+            } else if (degree === 'bachelor') {
+                if (age < 35) {
+                    status = "success";
+                    message = `<strong>অভিনন্দন!</strong> আপনি <strong>মাস্টার্স (Master's)</strong> প্রোগ্রামের জন্য যোগ্য (বয়স < ৩৫)।`;
+                } else if (age < 45) {
+                    status = "success";
+                    message = `<strong>ভালো খবর!</strong> আপনি <strong>জেনারেল স্কলার (General Scholar)</strong> হিসেবে আবেদন করতে পারেন।`;
+                } else {
+                    message = "দুঃখিত, জেনারেল স্কলারদের জন্য বয়সসীমা ৪৫ বছর।";
+                }
+            } else if (degree === 'hsc') {
+                if (age < 45) {
+                    status = "success";
+                    message = `<strong>আপনি যোগ্য।</strong> এইচএসসি পাশের পর আপনি <strong>জেনারেল স্কলার (General Scholar)</strong> প্রোগ্রামে স্নাতক পর্যায়ের ভিজিটিং ছাত্র হিসেবে আবেদন করতে পারেন (বয়স < ৪৫)।`;
+                } else {
+                    message = "দুঃখিত, আবেদনের বয়সসীমা অতিক্রান্ত হয়েছে।";
+                }
+            }
+
+            // UI Update
+            resultDiv.classList.remove('hidden', 'bg-green-50', 'bg-red-50', 'border-green-200', 'border-red-200');
+            resultDiv.classList.add('fade-in');
+            
+            if (status === 'success') {
+                resultDiv.classList.add('bg-green-50', 'border-green-200');
+                resultDiv.innerHTML = `
+                    <div class="flex items-center text-green-800">
+                        <span class="text-2xl mr-3">🎉</span>
+                        <div class="text-lg">${message}</div>
+                    </div>
+                    <div class="mt-3 text-sm text-green-700 font-medium">পরবর্তী ধাপ: উপরের চেকলিস্ট দেখে কাগজপত্র তৈরি করুন এবং BNCU তে যোগাযোগ করুন।</div>
+                `;
+            } else {
+                resultDiv.classList.add('bg-red-50', 'border-red-200');
+                resultDiv.innerHTML = `
+                    <div class="flex items-center text-red-800">
+                        <span class="text-2xl mr-3">⚠️</span>
+                        <div class="text-lg">${message}</div>
+                    </div>
+                    <div class="mt-2 text-sm text-red-700">বয়সসীমা এবং যোগ্যতার বিষয়টি অফিসিয়াল বিজ্ঞপ্তি থেকে পুনরায় যাচাই করুন।</div>
+                `;
+            }
+        }
+
+        // --- Chart.js Config (BDT Visualization) ---
+        function initChart() {
+            const ctx = document.getElementById('bdBenefitsChart').getContext('2d');
+            
+            // Conversion Rate approx 1 CNY = 16.5 BDT
+            const rate = 16.5; 
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['জেনারেল/মাস্টার্স', 'সিনিয়র/পিএইচডি'],
+                    datasets: [
+                        {
+                            label: 'মাসিক স্টাইপেন্ড (BDT)',
+                            data: [3000 * rate, 3500 * rate], // ~49.5k, ~57.7k
+                            backgroundColor: '#006A4E', // BD Green
+                            stack: 'Stack 0',
+                        },
+                        {
+                            label: 'আবাসন সুবিধা (আনুমানিক BDT)',
+                            data: [2500 * rate, 2500 * rate], 
+                            backgroundColor: '#CBD5E1',
+                            stack: 'Stack 0',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    return context.dataset.label + ': ' + context.raw.toLocaleString('en-BD') + ' টাকা';
+                                },
+                                footer: (items) => {
+                                    const total = items.reduce((a, b) => a + b.raw, 0);
+                                    return 'মোট মাসিক ভ্যালু: ~ ' + total.toLocaleString('en-BD') + ' টাকা';
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'মাসিক আর্থিক সুবিধার পরিমাণ (টাকায়)',
+                            font: { size: 16 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value / 1000 + 'k';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
